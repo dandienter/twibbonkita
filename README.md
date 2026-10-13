@@ -6,15 +6,19 @@ Generator twibbon **open-source**, **gratis**, **tanpa watermark**. Seperti Twib
 
 ## Fitur
 
+- **Akun kreator** - daftar/masuk, password di-hash (scrypt), sesi via cookie HTTP-only
+- **Bikin campaign** - login dulu, upload frame, dapat halaman campaign publik (`/c/[slug]`) dengan link share
+- **Tracking pemakaian** - tiap campaign dibuka, hitungan "dipakai" bertambah dan tercatat ke kreatornya
+- **Profil kreator** - `/kreator/[username]`: daftar template yang pernah dibuat + total pemakaian
+- **Editor 4 tahap** - Upload -> Frame -> Atur -> Unduh (berurutan, tidak bisa lompat)
 - **Upload foto** - klik atau drag & drop (JPG/PNG/WebP)
 - **6 frame bawaan** - badge, kotak, gradasi, pita, minimalis, meriah (SVG, bisa ditambah)
 - **Upload frame sendiri** - PNG/SVG transparan 1080x1080
 - **Editor kanvas** - seret foto (mouse + sentuh), zoom 50-300% (slider + pinch), putar, reset
-- **Unduh PNG** - resolusi penuh 1080x1080, **tanpa watermark**
-- **Bikin campaign** - buat halaman campaign dengan link share (`/editor?campaign=...`), tersimpan di browser
+- **Unduh PNG** - resolusi penuh 1080x1080, **tanpa watermark** (hanya di tahap terakhir)
 - **Caption generator** - template dengan placeholder `[nama]`, `[asal]`, dll + tombol salin
 - **Halaman kontributor & dukung**
-- **Neobrutalism UI** - mobile-first, responsif
+- **UI minimalis modern** - mobile-first, responsif
 
 ## Cara Menjalankan
 
@@ -32,21 +36,25 @@ npm run dev
 
 Buka http://localhost:3000
 
+Database SQLite otomatis dibuat di `./data/twibbonkita.db` saat pertama dijalankan (tabel users, campaigns, sessions + seed 6 campaign bawaan).
+
 ## Cara Pakai
 
 ### Bikin twibbon cepat
-1. Buka halaman utama, klik **Mulai Bikin**
-2. Upload foto kamu
-3. Pilih frame dari galeri (atau upload sendiri)
-4. Seret/zoom/putar foto sampai pas
-5. Klik **Unduh PNG**
+1. Buka halaman utama, pilih campaign
+2. Klik **Pakai Twibbon Ini**
+3. Tahap 1: upload foto kamu
+4. Tahap 2: pilih frame (frame campaign sudah terpilih)
+5. Tahap 3: seret/zoom/putar foto sampai pas
+6. Tahap 4: salin caption, klik **Unduh PNG**
 
 ### Bikin campaign + share link
-1. Klik **Bikin Campaign** (atau buka `/make`)
-2. Isi judul, deskripsi, upload frame PNG transparan
-3. Isi template caption, contoh: `Saya [nama] dari [kota] mendukung [acara]!`
-4. Klik **Buat & Dapatkan Link**
-5. Bagikan link `/editor?campaign=...` ke peserta
+1. **Daftar** akun kreator (gratis)
+2. Klik **Buat** (atau buka `/make`)
+3. Isi judul, deskripsi, upload frame PNG transparan
+4. Isi template caption, contoh: `Saya [nama] dari [kota] mendukung [acara]!`
+5. Klik **Buat & Dapatkan Link**
+6. Bagikan link `/c/[slug]` ke peserta. Setiap yang membuka tercatat sebagai pemakaian dan masuk ke profilmu.
 
 ### Tambah frame bawaan
 1. Taruh file SVG/PNG di `public/frames/`
@@ -58,20 +66,32 @@ Buka http://localhost:3000
 ```
 twibbonkita/
 ├── app/
-│   ├── page.tsx            # homepage
-│   ├── make/page.tsx       # form bikin campaign
-│   ├── editor/page.tsx     # editor kanvas utama
+│   ├── page.tsx              # homepage (campaign populer + kreator)
+│   ├── make/page.tsx         # form bikin campaign (login wajib)
+│   ├── editor/page.tsx       # editor 4 tahap
+│   ├── c/[slug]/page.tsx     # halaman campaign publik
+│   ├── kreator/[username]/page.tsx  # profil kreator
+│   ├── login/page.tsx
+│   ├── daftar/page.tsx
 │   ├── kontributor/page.tsx
 │   ├── dukung/page.tsx
+│   ├── api/
+│   │   ├── auth/             # register, login, logout, me
+│   │   ├── campaigns/        # list, create, detail
+│   │   └── creators/         # daftar kreator
 │   ├── layout.tsx
-│   └── globals.css         # style neobrutalism
+│   └── globals.css
 ├── components/
-│   ├── TwibbonCanvas.tsx   # kanvas + drag/zoom/rotate/download
-│   ├── FrameGallery.tsx    # galeri frame
-│   └── UploadZone.tsx      # drag & drop foto
+│   ├── Header.tsx            # navigasi + status login
+│   ├── TwibbonCanvas.tsx     # kanvas + drag/zoom/rotate/download
+│   ├── FrameGallery.tsx      # galeri frame
+│   └── UploadZone.tsx        # drag & drop foto
 ├── lib/
-│   └── frames.ts           # daftar frame + campaign (localStorage)
-├── public/frames/          # 6 frame SVG bawaan
+│   ├── db.ts                 # SQLite (better-sqlite3) + migrasi + seed
+│   ├── auth.ts               # hash password scrypt
+│   ├── session.ts            # sesi cookie
+│   └── frames.ts             # daftar frame bawaan + util caption
+├── public/frames/            # 6 frame SVG bawaan
 ├── README.md
 └── LICENSE (MIT)
 ```
@@ -79,9 +99,10 @@ twibbonkita/
 ## Teknologi
 
 - Next.js 14 (App Router) + TypeScript
-- Tailwind CSS (custom neobrutalism theme)
+- Tailwind CSS (tema minimalis modern)
+- better-sqlite3 (database file lokal, tanpa server DB)
 - HTML5 Canvas (compositing, tanpa library tambahan)
-- localStorage untuk campaign (tanpa backend)
+- Node crypto scrypt (hash password)
 
 ## Kontribusi
 
@@ -92,7 +113,7 @@ Sangat disambut! Cara ikut:
 3. Commit: `git commit -m "Tambah frame baru"`
 4. Push & buka Pull Request
 
-Ide kontribusi: frame template baru, terjemahan bahasa, mode gelap, export ukuran custom.
+Ide kontribusi: frame template baru, terjemahan bahasa, mode gelap, export ukuran custom, OAuth login.
 
 ## Lisensi
 

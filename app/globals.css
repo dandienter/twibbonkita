@@ -3,38 +3,82 @@
 @tailwind utilities;
 
 :root {
-  --brut-border: 3px solid #000;
-  --brut-shadow: 4px 4px 0 #000;
+  --brand: #4f46e5;
+  --brand-dark: #4338ca;
+  --brand-light: #eef2ff;
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: #FFFDF5;
-  color: #000;
-  font-family: "Archivo", "Inter", system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 @layer components {
-  .brut-card {
-    @apply border-3 border-black bg-white shadow-brut;
+  .card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
   }
-  .brut-btn {
-    @apply inline-flex items-center justify-center gap-2 border-3 border-black font-extrabold uppercase tracking-wide shadow-brut transition-transform active:translate-x-[2px] active:translate-y-[2px] active:shadow-brut-sm;
+  .card-hover {
+    @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
   }
-  .brut-input {
-    @apply w-full border-3 border-black bg-white px-4 py-3 font-semibold shadow-brut-sm outline-none focus:bg-yellow-50;
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 active:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50;
   }
-  .brut-label {
-    @apply mb-1 block text-sm font-extrabold uppercase tracking-wide;
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 active:bg-slate-100;
   }
-  .brut-range {
-    @apply w-full accent-black;
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900;
+  }
+  .input {
+    @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-slate-700;
+  }
+  .range {
+    @apply h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-indigo-600;
+  }
+  .section-title {
+    @apply text-xl font-bold tracking-tight text-slate-900 sm:text-2xl;
+  }
+  .checker {
+    background-image: repeating-conic-gradient(#f1f5f9 0 25%, #ffffff 0 50%);
+    background-size: 20px 20px;
   }
 }
 
 canvas {
   touch-action: none;
+}
+
+input[type="range"].range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #4f46e5;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+input[type="range"].range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #4f46e5;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 }

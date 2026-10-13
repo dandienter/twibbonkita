@@ -1,8 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
-  <rect x="0" y="0" width="1080" height="90" fill="#000"/>
-  <text x="540" y="62" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="44" font-weight="900" fill="#FFDE59">SAYA MENDUKUNG</text>
-  <path d="M0 780 L1080 780 L1080 1080 L0 1080 Z" fill="#B6F09C" stroke="#000" stroke-width="14"/>
-  <path d="M0 780 L270 900 L540 780 L810 900 L1080 780" fill="none" stroke="#000" stroke-width="10"/>
-  <text x="540" y="940" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="58" font-weight="900" fill="#000">KAMPANYE KITA</text>
-  <text x="540" y="1010" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#000">Pasang twibbon ini sebagai bentuk dukunganmu</text>
+  <!-- header: elegant black bar -->
+  <rect x="0" y="0" width="1080" height="132" fill="#111827"/>
+  <text x="540" y="88" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="900" letter-spacing="5" fill="#FBBF24">SAYA MENDUKUNG</text>
+
+  <!-- gold divider -->
+  <rect x="0" y="132" width="1080" height="10" fill="#FBBF24"/>
+
+  <!-- middle fully transparent for photo (y 142 - 850) -->
+
+  <!-- footer: soft green ribbon -->
+  <rect x="0" y="850" width="1080" height="230" fill="#BBF7D0"/>
+  <!-- zigzag ribbon accent, clear of text below -->
+  <path d="M0,864 L180,924 L360,864 L540,924 L720,864 L900,924 L1080,864" fill="none" stroke="#14532D" stroke-width="10"/>
+
+  <text x="540" y="992" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="900" letter-spacing="3" fill="#14532D">PASANG TWIBBON INI</text>
+  <text x="540" y="1044" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#166534">Pasang twibbon ini sebagai bentuk dukunganmu</text>
 </svg>

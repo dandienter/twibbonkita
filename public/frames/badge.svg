@@ -1,13 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1080" viewBox="0 0 1080 1080">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FFDE59"/>
-      <stop offset="1" stop-color="#FFB443"/>
+    <linearGradient id="badgeGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/>
+      <stop offset="0.5" stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#D97706"/>
     </linearGradient>
+    <path id="arcTop" d="M 100,540 A 440,440 0 0 1 980,540" fill="none"/>
+    <path id="arcBot" d="M 100,540 A 440,440 0 0 0 980,540" fill="none"/>
   </defs>
-  <rect width="1080" height="1080" fill="none"/>
-  <circle cx="540" cy="540" r="510" fill="url(#g)" stroke="#000" stroke-width="18"/>
-  <circle cx="540" cy="540" r="430" fill="none" stroke="#000" stroke-width="10"/>
-  <text x="540" y="120" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="64" font-weight="900" fill="#000">TWIBBONKITA</text>
-  <text x="540" y="985" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="56" font-weight="900" fill="#000">#BanggaBerbagi</text>
+
+  <!-- gold ring band (donut) : outer r=500, inner r=380, center transparent -->
+  <path fill-rule="evenodd" fill="url(#badgeGold)" stroke="#8A5A00" stroke-width="5"
+    d="M 40,540 a 500,500 0 1,0 1000,0 a 500,500 0 1,0 -1000,0
+       M 160,540 a 380,380 0 1,0 760,0 a 380,380 0 1,0 -760,0"/>
+
+  <!-- thin inner accent ring -->
+  <circle cx="540" cy="540" r="352" fill="none" stroke="#B45309" stroke-width="5" opacity="0.85"/>
+
+  <!-- curved text on the ring band (radius 440 = middle of band) -->
+  <text font-family="Arial, Helvetica, sans-serif" font-size="60" font-weight="900" fill="#5C3D00" letter-spacing="6">
+    <textPath xlink:href="#arcTop" href="#arcTop" startOffset="50%" text-anchor="middle">DUKUNG KAMPANYE</textPath>
+  </text>
+  <text font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="900" fill="#5C3D00" letter-spacing="6">
+    <textPath xlink:href="#arcBot" href="#arcBot" startOffset="50%" text-anchor="middle">BERSAMA KITA BISA</textPath>
+  </text>
+
+  <!-- stars on the sides of the ring (radius 440, clear of text) -->
+  <g transform="translate(100,540)" fill="#FFF7D6" stroke="#8A5A00" stroke-width="4">
+    <path d="M 0,-42 L 9.4,-12.9 L 39.9,-13 L 15.2,4.9 L 24.7,34 L 0,16 L -24.7,34 L -15.2,4.9 L -39.9,-13 L -9.4,-12.9 Z"/>
+  </g>
+  <g transform="translate(980,540)" fill="#FFF7D6" stroke="#8A5A00" stroke-width="4">
+    <path d="M 0,-42 L 9.4,-12.9 L 39.9,-13 L 15.2,4.9 L 24.7,34 L 0,16 L -24.7,34 L -15.2,4.9 L -39.9,-13 L -9.4,-12.9 Z"/>
+  </g>
 </svg>

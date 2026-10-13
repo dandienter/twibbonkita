@@ -8,20 +8,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brutyellow: "#FFDE59",
-        brutpink: "#FF90E8",
-        brutcyan: "#7DF9FF",
-        brutlime: "#B6F09C",
-        brutorange: "#FFB443",
-        brutbg: "#FFFDF5",
+        brand: {
+          50: "#eef2ff",
+          100: "#e0e7ff",
+          500: "#6366f1",
+          600: "#4f46e5",
+          700: "#4338ca",
+        },
       },
       boxShadow: {
-        brut: "4px 4px 0 #000",
-        "brut-sm": "2px 2px 0 #000",
-        "brut-lg": "6px 6px 0 #000",
-      },
-      borderWidth: {
-        3: "3px",
+        soft: "0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.05)",
+        lift: "0 8px 24px rgba(79, 70, 229, 0.12)",
       },
     },
   },

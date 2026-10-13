@@ -67,97 +67,147 @@ function EditorInner() {
   return (
     <div className="pt-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-black uppercase sm:text-3xl">
-          <span className="bg-brutcyan px-2">Editor</span>{" "}
-          {campaignTitle || "Twibbon"}
-        </h1>
-        <button onClick={copyLink} className="brut-btn bg-white px-4 py-2 text-sm">
+        <div>
+          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            {campaignTitle || "Editor Twibbon"}
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Ikuti 4 langkah mudah di bawah ini.
+          </p>
+        </div>
+        <button onClick={copyLink} className="btn-secondary px-4 py-2.5 text-sm">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M8 12h8m0 0l-3-3m3 3l-3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" transform="rotate(45 12 12)" opacity="0" />
+            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+          </svg>
           {linkCopied ? "Link Tersalin!" : "Salin Link"}
         </button>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      {/* Steps progress */}
+      <div className="mt-6 grid grid-cols-4 gap-2">
+        {["Upload", "Frame", "Atur", "Unduh"].map((s, i) => (
+          <div key={s} className="flex items-center gap-2">
+            <span
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                (i === 0 && photoUrl) || (i === 1 && frameUrl)
+                  ? "bg-indigo-600 text-white"
+                  : "bg-slate-200 text-slate-500"
+              }`}
+            >
+              {i + 1}
+            </span>
+            <span className="hidden text-xs font-semibold text-slate-600 sm:block">{s}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_380px]">
         <div>
           <TwibbonCanvas photoUrl={photoUrl} frameUrl={frameUrl} state={editor} onChange={setEditor} />
         </div>
 
-        <div className="space-y-6">
-          <section className="brut-card bg-white p-5">
-            <h2 className="mb-3 text-lg font-black uppercase">1. Foto Kamu</h2>
-            <UploadZone onPhoto={setPhotoUrl} hasPhoto={!!photoUrl} />
-          </section>
-
-          <section className="brut-card bg-white p-5">
-            <h2 className="mb-3 text-lg font-black uppercase">
-              2. Frame {customName && <span className="text-sm">({customName})</span>}
+        <div className="space-y-5">
+          <section className="card p-5">
+            <h2 className="flex items-center gap-2 text-base font-bold text-slate-900">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">1</span>
+              Foto Kamu
             </h2>
-            <FrameGallery
-              selected={frameUrl}
-              onSelect={(f) => {
-                setFrameUrl(f.src);
-                setCustomName("");
-              }}
-              onUploadCustom={(url, name) => {
-                setFrameUrl(url);
-                setCustomName(name);
-              }}
-            />
+            <div className="mt-3">
+              <UploadZone onPhoto={setPhotoUrl} hasPhoto={!!photoUrl} />
+            </div>
           </section>
 
-          <section className="brut-card bg-brutyellow p-5">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-lg font-black uppercase">3. Atur Foto</h2>
-              <button onClick={reset} className="brut-btn bg-white px-3 py-1 text-xs">
+          <section className="card p-5">
+            <h2 className="flex items-center gap-2 text-base font-bold text-slate-900">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">2</span>
+              Pilih Frame {customName && <span className="truncate text-xs font-medium text-slate-400">({customName})</span>}
+            </h2>
+            <div className="mt-3">
+              <FrameGallery
+                selected={frameUrl}
+                onSelect={(f) => {
+                  setFrameUrl(f.src);
+                  setCustomName("");
+                }}
+                onUploadCustom={(url, name) => {
+                  setFrameUrl(url);
+                  setCustomName(name);
+                }}
+              />
+            </div>
+          </section>
+
+          <section className="card bg-indigo-50/60 p-5">
+            <div className="flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-base font-bold text-slate-900">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white">3</span>
+                Atur Foto
+              </h2>
+              <button onClick={reset} className="btn-ghost text-xs">
                 Reset
               </button>
             </div>
-            <p className="mb-4 text-xs font-bold text-neutral-600">
+            <p className="mt-2 text-xs text-slate-500">
               Tips: seret langsung foto di kanvas untuk menggeser.
             </p>
-            <label className="brut-label">Zoom: {Math.round(editor.scale * 100)}%</label>
-            <input
-              type="range"
-              min={0.5}
-              max={3}
-              step={0.01}
-              value={editor.scale}
-              onChange={(e) => setEditor({ ...editor, scale: Number(e.target.value) })}
-              className="brut-range"
-            />
-            <label className="brut-label mt-4">Putar: {editor.rotation}°</label>
-            <input
-              type="range"
-              min={-180}
-              max={180}
-              step={1}
-              value={editor.rotation}
-              onChange={(e) => setEditor({ ...editor, rotation: Number(e.target.value) })}
-              className="brut-range"
-            />
-            <div className="mt-3 flex gap-2">
+            <div className="mt-4">
+              <div className="flex justify-between">
+                <label className="label">Zoom</label>
+                <span className="text-xs font-semibold text-indigo-700">{Math.round(editor.scale * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min={0.5}
+                max={3}
+                step={0.01}
+                value={editor.scale}
+                onChange={(e) => setEditor({ ...editor, scale: Number(e.target.value) })}
+                className="range"
+              />
+            </div>
+            <div className="mt-4">
+              <div className="flex justify-between">
+                <label className="label">Putar</label>
+                <span className="text-xs font-semibold text-indigo-700">{editor.rotation}°</span>
+              </div>
+              <input
+                type="range"
+                min={-180}
+                max={180}
+                step={1}
+                value={editor.rotation}
+                onChange={(e) => setEditor({ ...editor, rotation: Number(e.target.value) })}
+                className="range"
+              />
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2">
               <button
                 onClick={() => setEditor({ ...editor, rotation: editor.rotation - 90 })}
-                className="brut-btn flex-1 bg-white px-3 py-2 text-xs"
+                className="btn-secondary px-3 py-2 text-xs"
               >
                 Putar -90°
               </button>
               <button
                 onClick={() => setEditor({ ...editor, rotation: editor.rotation + 90 })}
-                className="brut-btn flex-1 bg-white px-3 py-2 text-xs"
+                className="btn-secondary px-3 py-2 text-xs"
               >
                 Putar +90°
               </button>
             </div>
           </section>
 
-          <section className="brut-card bg-white p-5">
-            <h2 className="mb-3 text-lg font-black uppercase">4. Caption</h2>
-            <div className="space-y-2">
+          <section className="card p-5">
+            <h2 className="flex items-center gap-2 text-base font-bold text-slate-900">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">4</span>
+              Caption
+            </h2>
+            <div className="mt-3 space-y-3">
               {fields.map((f) => (
                 <div key={f}>
-                  <label className="brut-label">{f}</label>
+                  <label className="label capitalize">{f}</label>
                   <input
-                    className="brut-input"
+                    className="input"
                     value={fieldValues[f] ?? ""}
                     onChange={(e) => setFieldValues({ ...fieldValues, [f]: e.target.value })}
                     placeholder={`Isi ${f}...`}
@@ -165,10 +215,10 @@ function EditorInner() {
                 </div>
               ))}
             </div>
-            <div className="mt-3 border-3 border-black bg-neutral-50 p-3 text-sm font-semibold">
+            <div className="mt-3 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
               {caption}
             </div>
-            <button onClick={copyCaption} className="brut-btn mt-3 w-full bg-brutpink px-4 py-3 text-sm">
+            <button onClick={copyCaption} className="btn-secondary mt-3 w-full py-3 text-sm">
               {copied ? "Tersalin!" : "Salin Caption"}
             </button>
           </section>
@@ -180,7 +230,7 @@ function EditorInner() {
 
 export default function EditorPage() {
   return (
-    <Suspense fallback={<p className="pt-8 font-bold">Memuat editor...</p>}>
+    <Suspense fallback={<p className="pt-8 text-slate-500">Memuat editor...</p>}>
       <EditorInner />
     </Suspense>
   );

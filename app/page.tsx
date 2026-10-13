@@ -1,16 +1,50 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { BUILTIN_FRAMES } from "@/lib/frames";
+import { useEffect, useMemo, useState } from "react";
+
+interface Campaign {
+  slug: string;
+  title: string;
+  description: string;
+  frame_data: string;
+  use_count: number;
+  username: string;
+  display_name: string;
+}
+
+interface Creator {
+  username: string;
+  display_name: string;
+  campaign_count: number;
+  total_use: number;
+}
 
 export default function Home() {
   const [query, setQuery] = useState("");
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [creators, setCreators] = useState<Creator[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const frames = useMemo(() => {
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/campaigns").then((r) => r.json()).catch(() => ({ campaigns: [] })),
+      fetch("/api/creators").then((r) => r.json()).catch(() => ({ creators: [] })),
+    ]).then(([c, k]) => {
+      setCampaigns(c.campaigns ?? []);
+      setCreators(k.creators ?? []);
+      setLoading(false);
+    });
+  }, []);
+
+  const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return BUILTIN_FRAMES;
-    return BUILTIN_FRAMES.filter((f) => f.name.toLowerCase().includes(q));
-  }, [query]);
+    if (!q) return campaigns;
+    return campaigns.filter(
+      (c) =>
+        c.title.toLowerCase().includes(q) ||
+        c.display_name.toLowerCase().includes(q)
+    );
+  }, [campaigns, query]);
 
   return (
     <div>
@@ -34,15 +68,15 @@ export default function Home() {
             Menemukanmu
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base text-indigo-100 sm:text-lg">
-            Upload foto, pilih frame favoritmu, atur posisi, lalu unduh hasilnya.
-            Tanpa daftar, tanpa watermark, open-source selamanya.
+            Pilih campaign, upload foto, atur posisi, lalu unduh hasilnya.
+            Tanpa watermark, open-source selamanya.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <a
-              href="/editor"
+              href="#campaign"
               className="rounded-xl bg-white px-8 py-3.5 text-base font-bold text-indigo-700 shadow-lg transition-transform hover:scale-[1.02]"
             >
-              Mulai Sekarang
+              Jelajahi Campaign
             </a>
             <a
               href="/make"
@@ -54,13 +88,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Search + grid */}
-      <section className="mt-12">
+      {/* Campaign populer */}
+      <section id="campaign" className="mt-12 scroll-mt-20">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h2 className="section-title">Jelajahi Campaign</h2>
+            <h2 className="section-title">Campaign Populer</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Pilih frame di bawah ini, atau buat campaign versimu sendiri.
+              Campaign yang paling banyak dipakai oleh pengguna.
             </p>
           </div>
           <div className="relative w-full sm:w-72">
@@ -77,37 +111,57 @@ export default function Home() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Cari frame..."
+              placeholder="Cari campaign..."
               className="input pl-10"
             />
           </div>
         </div>
 
-        {frames.length === 0 ? (
+        {loading ? (
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="card animate-pulse overflow-hidden">
+                <div className="aspect-square bg-slate-100" />
+                <div className="px-4 py-3">
+                  <div className="h-4 w-2/3 rounded bg-slate-100" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="card mt-6 p-10 text-center text-sm text-slate-500">
-            Tidak ada frame yang cocok dengan &ldquo;{query}&rdquo;.
+            {query
+              ? `Tidak ada campaign yang cocok dengan "${query}".`
+              : "Belum ada campaign. Jadilah yang pertama membuatnya!"}
           </div>
         ) : (
-          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
-            {frames.map((f) => (
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {filtered.map((c) => (
               <a
-                key={f.id}
-                href={`/editor?frame=${f.id}`}
+                key={c.slug}
+                href={`/c/${c.slug}`}
                 className="card card-hover group overflow-hidden"
               >
                 <div className="checker aspect-square w-full">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={f.src}
-                    alt={f.name}
+                    src={c.frame_data}
+                    alt={c.title}
                     className="h-full w-full object-contain p-4 transition-transform duration-200 group-hover:scale-105"
                   />
                 </div>
-                <div className="flex items-center justify-between px-4 py-3">
-                  <p className="text-sm font-semibold text-slate-800">{f.name}</p>
-                  <span className="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
-                    Pakai
-                  </span>
+                <div className="px-4 py-3">
+                  <p className="truncate text-sm font-semibold text-slate-800">
+                    {c.title}
+                  </p>
+                  <div className="mt-1 flex items-center justify-between">
+                    <p className="truncate text-xs text-slate-400">
+                      oleh {c.display_name}
+                    </p>
+                    <span className="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-700">
+                      {c.use_count} dipakai
+                    </span>
+                  </div>
                 </div>
               </a>
             ))}
@@ -115,29 +169,54 @@ export default function Home() {
         )}
       </section>
 
+      {/* Kreator */}
+      {creators.length > 0 && (
+        <section className="mt-14">
+          <h2 className="section-title">Kreator</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Orang-orang di balik campaign favoritmu.
+          </p>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {creators.map((k) => (
+              <a
+                key={k.username}
+                href={`/kreator/${k.username}`}
+                className="card card-hover flex items-center gap-3 p-4"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-base font-bold text-indigo-700">
+                  {k.display_name.charAt(0).toUpperCase()}
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-slate-900">
+                    {k.display_name}
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    {k.campaign_count} template - {k.total_use} dipakai
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Features */}
       <section className="mt-14 grid gap-4 sm:grid-cols-3">
         {[
           {
             t: "Tanpa Watermark",
             d: "Hasil unduhan bersih 1080x1080, tidak ada logo menempel.",
-            icon: (
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            ),
+            icon: <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />,
           },
           {
             t: "100% Gratis",
             d: "Semua fitur terbuka. Kode sumber bebas dipakai dan dimodifikasi.",
-            icon: (
-              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            ),
+            icon: <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
           },
           {
-            t: "Privasi Terjaga",
-            d: "Semua proses berjalan di browser kamu. Foto tidak diunggah ke server.",
-            icon: (
-              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            ),
+            t: "Milik Bersama",
+            d: "Buat campaign, bagikan link-nya, dan lihat berapa banyak yang memakai.",
+            icon: <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />,
           },
         ].map((x) => (
           <div key={x.t} className="card p-6">
@@ -164,8 +243,8 @@ export default function Home() {
           Punya campaign sendiri?
         </h2>
         <p className="mt-2 max-w-md text-sm text-slate-300 sm:text-base">
-          Upload frame campaign-mu, dapatkan link share yang bisa disebar ke
-          siapa pun.
+          Daftar gratis, upload frame campaign-mu, dan dapatkan link share yang
+          bisa disebar ke siapa pun.
         </p>
         <a
           href="/make"

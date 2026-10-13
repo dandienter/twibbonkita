@@ -13,37 +13,6 @@ export const BUILTIN_FRAMES: Frame[] = [
   { id: "meriah", name: "Meriah", src: "/frames/meriah.svg" },
 ];
 
-export interface Campaign {
-  slug: string;
-  title: string;
-  description: string;
-  frameSrc: string;
-  captionTemplate: string;
-  createdAt: string;
-}
-
-const LS_KEY = "twibbonkita:campaigns";
-
-export function loadCampaigns(): Campaign[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    return raw ? (JSON.parse(raw) as Campaign[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-export function saveCampaign(c: Campaign) {
-  const all = loadCampaigns().filter((x) => x.slug !== c.slug);
-  all.unshift(c);
-  localStorage.setItem(LS_KEY, JSON.stringify(all));
-}
-
-export function getCampaign(slug: string): Campaign | null {
-  return loadCampaigns().find((c) => c.slug === slug) ?? null;
-}
-
 export function slugify(s: string): string {
   return (
     s

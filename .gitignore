@@ -20,6 +20,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# sqlite database
+/data
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brut-border: 3px solid #000;
+  --brut-shadow: 4px 4px 0 #000;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #FFFDF5;
+  color: #000;
+  font-family: "Archivo", "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer components {
+  .brut-card {
+    @apply border-3 border-black bg-white shadow-brut;
+  }
+  .brut-btn {
+    @apply inline-flex items-center justify-center gap-2 border-3 border-black font-extrabold uppercase tracking-wide shadow-brut transition-transform active:translate-x-[2px] active:translate-y-[2px] active:shadow-brut-sm;
+  }
+  .brut-input {
+    @apply w-full border-3 border-black bg-white px-4 py-3 font-semibold shadow-brut-sm outline-none focus:bg-yellow-50;
+  }
+  .brut-label {
+    @apply mb-1 block text-sm font-extrabold uppercase tracking-wide;
+  }
+  .brut-range {
+    @apply w-full accent-black;
+  }
+}
+
+canvas {
+  touch-action: none;
+}

@@ -132,12 +132,12 @@ export default function TwibbonCanvas({ photoUrl, frameUrl, state, onChange }: P
 
   return (
     <div>
-      <div ref={wrapRef} className="brut-card overflow-hidden p-2">
+      <div className="card overflow-hidden p-2 shadow-soft">
         <canvas
           ref={canvasRef}
           width={SIZE}
           height={SIZE}
-          className="h-auto w-full cursor-grab touch-none select-none active:cursor-grabbing"
+          className="h-auto w-full cursor-grab touch-none select-none rounded-xl active:cursor-grabbing"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -148,15 +148,19 @@ export default function TwibbonCanvas({ photoUrl, frameUrl, state, onChange }: P
         />
       </div>
       {!photoUrl && (
-        <p className="mt-3 text-center text-sm font-bold text-neutral-500">
+        <p className="mt-3 text-center text-sm text-slate-400">
           Upload foto dulu untuk mulai mengedit.
         </p>
       )}
-      <button onClick={download} disabled={!photoUrl} className="brut-btn mt-4 w-full bg-brutlime px-6 py-4 text-lg disabled:opacity-40">
+      <button onClick={download} disabled={!photoUrl} className="btn-primary mt-4 w-full py-4 text-base">
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <path d="M12 16V4m0 0l-4 4m4-4l4 4" />
+          <path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3" />
+        </svg>
         Unduh PNG
       </button>
-      <p className="mt-2 text-center text-xs font-bold text-neutral-500">
-        Tanpa watermark. Gratis selamanya.
+      <p className="mt-2 text-center text-xs text-slate-400">
+        Resolusi 1080x1080. Tanpa watermark. Gratis selamanya.
       </p>
     </div>
   );

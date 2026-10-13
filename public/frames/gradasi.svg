@@ -1,16 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
   <defs>
-    <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7DF9FF"/>
-      <stop offset="0.5" stop-color="#FF90E8"/>
-      <stop offset="1" stop-color="#FFDE59"/>
+    <linearGradient id="gradasiLine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EC4899"/>
+      <stop offset="0.5" stop-color="#F97316"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
     </linearGradient>
   </defs>
-  <rect x="15" y="15" width="1050" height="1050" fill="none" stroke="url(#gg)" stroke-width="70"/>
-  <rect x="15" y="15" width="1050" height="1050" fill="none" stroke="#000" stroke-width="12"/>
-  <rect x="60" y="60" width="960" height="960" fill="none" stroke="#000" stroke-width="8"/>
-  <circle cx="120" cy="120" r="46" fill="#FFDE59" stroke="#000" stroke-width="8"/>
-  <circle cx="960" cy="120" r="46" fill="#FF90E8" stroke="#000" stroke-width="8"/>
-  <circle cx="120" cy="960" r="46" fill="#7DF9FF" stroke="#000" stroke-width="8"/>
-  <circle cx="960" cy="960" r="46" fill="#B6F09C" stroke="#000" stroke-width="8"/>
+
+  <!-- thin elegant gradient border, large rounded corners -->
+  <rect x="34" y="34" width="1012" height="1012" rx="200" fill="none" stroke="url(#gradasiLine)" stroke-width="26"/>
 </svg>

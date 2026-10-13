@@ -38,61 +38,95 @@ export default function MakePage() {
   };
 
   return (
-    <div className="pt-8">
-      <h1 className="text-3xl font-black uppercase">
-        <span className="bg-brutpink px-2">Bikin</span> Campaign
-      </h1>
-      <p className="mt-2 font-semibold">
-        Upload frame campaign-mu, dapatkan link share yang bisa disebar.
-      </p>
+    <div className="mx-auto max-w-2xl pt-10">
+      <div className="text-center">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          Bikin Campaign
+        </h1>
+        <p className="mt-2 text-slate-500">
+          Upload frame campaign-mu, dapatkan link share yang bisa disebar.
+        </p>
+      </div>
 
-      <div className="brut-card mt-6 bg-white p-5 sm:p-6">
+      <div className="card mt-8 p-6 sm:p-8">
         {error && (
-          <div className="mb-4 border-3 border-black bg-red-200 px-4 py-2 font-bold">{error}</div>
+          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+            {error}
+          </div>
         )}
-        <label className="brut-label">Judul Campaign *</label>
+
+        <label className="label" htmlFor="title">
+          Judul Campaign *
+        </label>
         <input
-          className="brut-input"
+          id="title"
+          className="input"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Contoh: Semarak HUT RI ke-81"
         />
 
-        <label className="brut-label mt-4">Deskripsi</label>
+        <label className="label mt-5" htmlFor="desc">
+          Deskripsi
+        </label>
         <textarea
-          className="brut-input min-h-[90px]"
+          id="desc"
+          className="input min-h-[90px] resize-y"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Ceritakan tentang campaign ini..."
         />
 
-        <label className="brut-label mt-4">Frame (PNG transparan) *</label>
-        <label className="brut-btn w-full cursor-pointer bg-brutcyan px-4 py-3 text-sm">
-          {frameName || "Pilih File Frame"}
-          <input type="file" accept="image/png,image/svg+xml" className="hidden" onChange={handleFrame} />
+        <label className="label mt-5">Frame (PNG transparan) *</label>
+        <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center transition-colors hover:border-indigo-400 hover:bg-indigo-50/50">
+          <svg
+            className="h-8 w-8 text-slate-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span className="mt-2 text-sm font-semibold text-slate-700">
+            {frameName || "Klik untuk pilih file frame"}
+          </span>
+          <span className="mt-1 text-xs text-slate-400">
+            PNG transparan 1080x1080 disarankan
+          </span>
+          <input
+            type="file"
+            accept="image/png,image/svg+xml"
+            className="hidden"
+            onChange={handleFrame}
+          />
         </label>
         {frameUrl && (
-          <div className="mt-3 border-3 border-black p-2">
+          <div className="checker mt-3 overflow-hidden rounded-xl border border-slate-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={frameUrl}
               alt="preview frame"
-              className="mx-auto h-40 bg-[repeating-conic-gradient(#eee_0_25%,#fff_0_50%)] bg-[length:20px_20px] object-contain"
+              className="mx-auto h-44 object-contain"
             />
           </div>
         )}
 
-        <label className="brut-label mt-4">Template Caption</label>
+        <label className="label mt-5" htmlFor="caption">
+          Template Caption
+        </label>
         <textarea
-          className="brut-input min-h-[90px]"
+          id="caption"
+          className="input min-h-[90px] resize-y"
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
         />
-        <p className="mt-1 text-xs font-semibold text-neutral-500">
-          Teks dalam [kurung] jadi kolom isian otomatis, contoh: [nama], [asal], [acara].
+        <p className="mt-1.5 text-xs text-slate-400">
+          Teks dalam [kurung] jadi kolom isian otomatis, contoh: [nama], [asal],
+          [acara].
         </p>
 
-        <button onClick={submit} className="brut-btn mt-6 w-full bg-brutlime px-6 py-4 text-lg">
+        <button onClick={submit} className="btn-primary mt-7 w-full py-4 text-base">
           Buat &amp; Dapatkan Link
         </button>
       </div>
